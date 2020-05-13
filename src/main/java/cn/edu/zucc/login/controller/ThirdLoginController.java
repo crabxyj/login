@@ -23,14 +23,20 @@ public class ThirdLoginController {
     private AccountService service;
 
     private static Map<String,BeanAccount> ticketsMap = new ConcurrentHashMap<>();
+    private static Map<Integer,String> idTicketMap = new ConcurrentHashMap<>();
 
     @RequestMapping("/login")
     public BeanResult login(@RequestParam String account, @RequestParam String password){
         BeanAccount one = new BeanAccount().setAccount(account).setPassword(password);
         try {
-            String ticket = UUID.randomUUID().toString();
             one = service.login(one);
-            ticketsMap.put(ticket,one);
+
+            String ticket = idTicketMap.get(one.getId());
+            if (ticket==null){
+                ticket = UUID.randomUUID().toString();
+                ticketsMap.put(ticket,one);
+                idTicketMap.put(one.getId(),ticket);
+            }
             return BeanResult.fromSuccess(ticket);
         } catch (BaseException e) {
             return BeanResult.fromException(e);

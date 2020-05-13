@@ -25,4 +25,18 @@ public class BeanAccount {
     @TableField
     @NotBlank(message = "密码不能为空")
     private String password;
+
+    @Override
+    public int hashCode() {
+        return this.id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof BeanAccount){
+            BeanAccount one = (BeanAccount) obj;
+            return one.getId() == this.id;
+        }
+        return false;
+    }
 }
