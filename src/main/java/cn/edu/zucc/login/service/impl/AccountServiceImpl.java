@@ -1,7 +1,7 @@
 package cn.edu.zucc.login.service.impl;
 
+import cn.edu.zucc.login.common.exception.BusinessException;
 import cn.edu.zucc.login.dao.AccountDao;
-import cn.edu.zucc.login.exception.BaseException;
 import cn.edu.zucc.login.pojo.BeanAccount;
 import cn.edu.zucc.login.service.AccountService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,12 +28,12 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, BeanAccount> imp
     }
 
     @Override
-    public BeanAccount login(@Valid BeanAccount account) throws BaseException{
+    public BeanAccount login(@Valid BeanAccount account) throws BusinessException {
         BeanAccount one = getByAccount(account)
-                .orElseThrow(()->new BaseException("账号或密码错误"));
+                .orElseThrow(()->new BusinessException("账号或密码错误"));
 
         if (!one.getPassword().equals(account.getPassword())){
-            throw new BaseException("账号或密码错误");
+            throw new BusinessException("账号或密码错误");
         }
         return one;
     }
@@ -44,9 +44,9 @@ public class AccountServiceImpl extends ServiceImpl<AccountDao, BeanAccount> imp
     }
 
     @Override
-    public BeanAccount register(@Valid BeanAccount account) throws BaseException {
+    public BeanAccount register(@Valid BeanAccount account) throws BusinessException {
         if (getByAccount(account).isPresent()){
-            throw new BaseException("当前账号已存在");
+            throw new BusinessException("当前账号已存在");
         }
         dao.insert(account);
         return account;

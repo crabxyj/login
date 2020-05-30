@@ -1,9 +1,8 @@
 package cn.edu.zucc.login.controller;
 
-import cn.edu.zucc.login.exception.BaseException;
+import cn.edu.zucc.login.common.exception.BusinessException;
 import cn.edu.zucc.login.pojo.BeanAccount;
 import cn.edu.zucc.login.service.AccountService;
-import cn.edu.zucc.login.utils.BeanResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,49 +25,36 @@ public class ThirdLoginController {
     private static Map<Integer,String> idTicketMap = new ConcurrentHashMap<>();
 
     @RequestMapping("/login")
-    public BeanResult login(@RequestParam String account, @RequestParam String password){
+    public String login(@RequestParam String account, @RequestParam String password) throws BusinessException {
         BeanAccount one = new BeanAccount().setAccount(account).setPassword(password);
-        try {
-            one = service.login(one);
+        one = service.login(one);
 
-            String ticket = idTicketMap.get(one.getId());
-            if (ticket==null){
-                ticket = UUID.randomUUID().toString();
-                ticketsMap.put(ticket,one);
-                idTicketMap.put(one.getId(),ticket);
-            }
-            return BeanResult.fromSuccess(ticket);
-        } catch (BaseException e) {
-            return BeanResult.fromException(e);
+        String ticket = idTicketMap.get(one.getId());
+        if (ticket==null){
+            ticket = UUID.randomUUID().toString();
+            ticketsMap.put(ticket,one);
+            idTicketMap.put(one.getId(),ticket);
         }
+        return ticket;
     }
 
     @PostMapping("/register")
-    public BeanResult register(@RequestParam String account,@RequestParam String password){
+    public String register(@RequestParam String account,@RequestParam String password) throws BusinessException {
         BeanAccount one = new BeanAccount().setAccount(account).setPassword(password);
-        try {
-            one = service.register(one);
-            String ticket = UUID.randomUUID().toString();
-            ticketsMap.put(ticket,one);
-            return BeanResult.fromSuccess(ticket);
-        } catch (BaseException e) {
-            return BeanResult.fromException(e);
-        }
+        one = service.register(one);
+        String ticket = UUID.randomUUID().toString();
+        ticketsMap.put(ticket,one);
+        return ticket;
     }
 
     @RequestMapping("/logout")
-    public BeanResult logout(String token, String ticket){
+    public void logout(String token, String ticket){
         ticketsMap.remove(ticket);
-        return BeanResult.fromSuccess(null);
     }
 
     @RequestMapping("/ticketLogin")
-    public BeanResult ticketLogin(String token, String ticket){
-        BeanAccount one = ticketsMap.get(ticket);
-        if (one!=null){
-            return BeanResult.fromSuccess(one);
-        }
-        return BeanResult.fromMsg(-1,"当前账号未登录");
+    public BeanAccount ticketLogin(String token, String ticket){
+        return ticketsMap.get(ticket);
     }
 
 }

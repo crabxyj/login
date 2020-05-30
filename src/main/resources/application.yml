@@ -13,8 +13,8 @@ spring:
     active: dev
 
   datasource:
-    url: jdbc:mysql://192.168.52.60:3306/normal?serverTimezone=UTC
-#    url: jdbc:mysql://127.0.0.1:3306/normal?serverTimezone=UTC
+#    url: jdbc:mysql://192.168.52.60:3306/normal?serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/normal?serverTimezone=UTC
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
