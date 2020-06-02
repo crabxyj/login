@@ -31,7 +31,6 @@ public class LoginController {
     @PostMapping("/register")
     public BeanAccount register(@RequestParam String account,@RequestParam String password) throws BusinessException {
         BeanAccount one = new BeanAccount().setAccount(account).setPassword(password);
-        System.out.println(JSON.toJSONString(account));
         return service.register(one);
     }
 
