@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2020/5/12 16:11
  */
 @RestController
-@CrossOrigin
 @RequestMapping("/thirdlogin")
 public class ThirdLoginController {
     @Resource(name = "accountServiceImpl")

@@ -1,4 +1,4 @@
-package cn.edu.zucc.login.common.config;
+package cn.edu.zucc.login.common.mybatis;
 
 import cn.edu.zucc.login.common.logs.MybatisSqlLogInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
@@ -29,4 +29,5 @@ public class MybatisPlusConfig {
     public PaginationInterceptor paginationInterceptor(){
         return new PaginationInterceptor();
     }
+
 }
